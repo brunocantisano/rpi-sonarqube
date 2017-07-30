@@ -1,11 +1,16 @@
-FROM paperinik/rpi-java8
+FROM resin/rpi-raspbian
 MAINTAINER Bruno Cantisano <bruno.cantisano@gmail.com>
 
 LABEL version latest
 LABEL description SonarQube Raspberry Pi 2 Container
 
-RUN apt-get clean && apt-get update \
-    && apt-get install -y build-essential wget unzip \
+RUN apt-get clean \
+    && apt-get update \
+    && apt-get install -y \
+    build-essential \
+    wget \
+    unzip \
+    oracle-java8-jdk \
     && wget https://wrapper.tanukisoftware.com/download/3.5.17/wrapper_prerelease_3.5.17.tar.gz \
     && wget http://archive.apache.org/dist/ant/binaries/apache-ant-1.9.4-bin.tar.gz \
     && wget https://sonarsource.bintray.com/Distribution/sonarqube/sonarqube-5.6.6.zip \
@@ -23,6 +28,7 @@ RUN apt-get clean && apt-get update \
     && mv sonar-javascript-plugin-3.1.1.5128.jar sonarqube-5.6.6/extensions/plugins \
     && mv apache-ant-1.9.4 /usr/share/ant
 
+ENV JAVA_HOME /usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt
 ENV ANT_HOME /usr/share/ant
 
 RUN /wrapper_prerelease_3.5.17/build32.sh release \
