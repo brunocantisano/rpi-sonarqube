@@ -18,10 +18,12 @@ RUN apt-get clean \
     && wget https://sonarsource.bintray.com/Distribution/sonar-scm-git-plugin/sonar-scm-git-plugin-1.2.jar \
     && wget https://sonarsource.bintray.com/Distribution/sonar-github-plugin/sonar-github-plugin-1.4.1.822.jar \
     && wget https://sonarsource.bintray.com/Distribution/sonar-javascript-plugin/sonar-javascript-plugin-3.1.1.5128.jar \
+    && wget https://sonarsource.bintray.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.0.3.778.zip \
     && tar -xvzf wrapper_prerelease_3.5.17.tar.gz \
     && tar -xvzf apache-ant-1.9.4-bin.tar.gz \
     && unzip sonarqube-5.6.6.zip \
-    && rm -f wrapper_prerelease_3.5.17.tar.gz apache-ant-1.9.4-bin.tar.gz sonarqube-5.6.6.zip \
+    && unzip sonar-scanner-cli-3.0.3.778.zip \
+    && rm -f wrapper_prerelease_3.5.17.tar.gz apache-ant-1.9.4-bin.tar.gz sonarqube-5.6.6.zip sonar-scanner-cli-3.0.3.778.zip \
     && mv sonar-java-plugin-4.11.0.10660.jar sonarqube-5.6.6/extensions/plugins \
     && mv sonar-scm-git-plugin-1.2.jar sonarqube-5.6.6/extensions/plugins \
     && mv sonar-github-plugin-1.4.1.822.jar sonarqube-5.6.6/extensions/plugins \
@@ -30,6 +32,8 @@ RUN apt-get clean \
 
 ENV JAVA_HOME /usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt
 ENV ANT_HOME /usr/share/ant
+ENV SONAR_SCANNER_OPTS -Xmx512m 
+ENV PATH $PATH:/sonar-scanner-3.0.3.778/bin 
 
 RUN /wrapper_prerelease_3.5.17/build32.sh release \
     && tar -xvzf /wrapper_prerelease_3.5.17/dist/wrapper-linux-armhf-32-3.5.17.tar.gz \    

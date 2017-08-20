@@ -8,6 +8,8 @@ DB_HOST=${DB_HOST:-db}
 DB_NAME=${DB_NAME:-sonar}
 DB_USER=${DB_USER:-sonar}
 DB_PASS=${DB_PASS:-xaexohquaetiesoo}
+SONAR_HOST=${SONAR_HOST:-localhost}
+SONAR_PORT=${SONAR_PORT:-9000}
 
 # Configure wrapper.conf
 sed -i 's/wrapper.java.command=java/wrapper.java.command=\/usr\/lib\/jvm\/jdk-8-oracle-arm32-vfp-hflt\/bin\/java/' /sonarqube-5.6.6/conf/wrapper.conf 
@@ -18,6 +20,10 @@ sed -i 's|#sonar.jdbc.username=|sonar.jdbc.username='"${DB_USER}"'|g' /sonarqube
 sed -i 's|#sonar.jdbc.password=|sonar.jdbc.password='"${DB_PASS}"'|g' /sonarqube-5.6.6/conf/sonar.properties 
 sed -i 's|sonar.jdbc.url=jdbc:h2|#sonar.jdbc.url=jdbc:h2|g' /sonarqube-5.6.6/conf/sonar.properties 
 sed -i 's|#sonar.jdbc.url=jdbc:postgresql://localhost/sonar|sonar.jdbc.url=jdbc:postgresql://'"${DB_HOST}"'/'"${DB_NAME}"'|g' /sonarqube-5.6.6/conf/sonar.properties 
+
+# Configure sonar-scanner.properties
+sed -i 's|#sonar.host.url=http://localhost:9000|sonar.host.url=http://'"${SONAR_HOST}"':'"${SONAR_PORT}"'|g' /sonar-scanner-3.0.3.778/conf/sonar-scanner.properties
+sed -i 's|#sonar|sonar|g' /sonar-scanner-3.0.3.778/conf/sonar-scanner.properties
 
 appStart () {
   echo "Starting sonarqube..."
