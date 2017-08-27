@@ -1,11 +1,32 @@
-# docker rpi-sonarqube, a simple raspberry pi sonarqube container
-Runs a small sonarqube server, based on [resin/rpi-raspbian](https://hub.docker.com/r/resin/rpi-raspbian/)
-This container was made based on this description [https://gist.github.com/synox/7600843]
+# Sonarqube
 
-### Create an image and a container with Script files
-- The script "build.sh" creates a image from Dockerfile with the tag "paperinik/rpi-sonarqube". 
-- The script "run.sh" needs one argument, which is a name for the container (e.g. SonarQube). 
+![docker_logo](https://raw.githubusercontent.com/brunocantisano/rpi-sonarqube/master/files/docker.png)![docker_sonar_logo](https://raw.githubusercontent.com/brunocantisano/rpi-sonarqube/master/files/logo-sonarqube.png)![docker_paperinik_logo](https://raw.githubusercontent.com/brunocantisano/rpi-sonarqube/master/files/docker_paperinik_120x120.png)
 
-### Create the container by hand
-Create the container: 
-"docker run -d -p 9000:9000 --name SonarQube paperinik/rpi-sonarqube"
+This Docker container implements a Sonarqube Server with the Sonar Scanner.
+
+ * Raspbian base image.
+ 
+### Installation from [Docker registry hub](https://registry.hub.docker.com/u/paperinik/rpi-sonarqube/).
+
+You can download the image with the following command:
+
+```bash
+docker pull paperinik/rpi-sonarqube
+```
+
+# How to use this image
+
+Exposed ports and volumes
+----
+
+The image exposes port `9000`. Also, exports two volumes: `/sonarqube-5.6.6/extensions` and `/sonarqube-5.6.6/logs/`, used to store all the plugins and the other is used to store the sonarqube logs.
+
+Use cases
+
+----
+
+1) If you'd like to run the container:
+
+```bash
+docker run --name sonar -it -p 9416:3000 paperinik/rpi-sonarqube
+```

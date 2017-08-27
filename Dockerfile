@@ -1,4 +1,4 @@
-FROM resin/rpi-raspbian
+FROM paperinik/rpi-java8:latest
 MAINTAINER Bruno Cantisano <bruno.cantisano@gmail.com>
 
 LABEL version latest
@@ -10,7 +10,6 @@ RUN apt-get clean \
     build-essential \
     wget \
     unzip \
-    oracle-java8-jdk \
     && wget https://wrapper.tanukisoftware.com/download/3.5.17/wrapper_prerelease_3.5.17.tar.gz \
     && wget http://archive.apache.org/dist/ant/binaries/apache-ant-1.9.4-bin.tar.gz \
     && wget https://sonarsource.bintray.com/Distribution/sonarqube/sonarqube-5.6.6.zip \
@@ -30,7 +29,6 @@ RUN apt-get clean \
     && mv sonar-javascript-plugin-3.1.1.5128.jar sonarqube-5.6.6/extensions/plugins \
     && mv apache-ant-1.9.4 /usr/share/ant
 
-ENV JAVA_HOME /usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt
 ENV ANT_HOME /usr/share/ant
 ENV SONAR_SCANNER_OPTS -Xmx512m 
 ENV PATH $PATH:/sonar-scanner-3.0.3.778/bin 
@@ -46,7 +44,7 @@ RUN /wrapper_prerelease_3.5.17/build32.sh release \
 
 ENV ANT_HOME= 
 
-COPY assets/init.sh /init.sh
+COPY files/init.sh /init.sh
 RUN chmod 755 /init.sh
 
 VOLUME /sonarqube-5.6.6/extensions /sonarqube-5.6.6/logs/
