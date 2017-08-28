@@ -10,6 +10,7 @@ RUN apt-get clean \
     build-essential \
     wget \
     unzip \
+    && cd / \
     && wget https://wrapper.tanukisoftware.com/download/3.5.17/wrapper_prerelease_3.5.17.tar.gz \
     && wget http://archive.apache.org/dist/ant/binaries/apache-ant-1.9.4-bin.tar.gz \
     && wget https://sonarsource.bintray.com/Distribution/sonarqube/sonarqube-5.6.6.zip \
@@ -33,8 +34,7 @@ ENV ANT_HOME /usr/share/ant
 ENV SONAR_SCANNER_OPTS -Xmx512m 
 ENV PATH $PATH:/sonar-scanner-3.0.3.778/bin 
  
-RUN cd / \
-    && /wrapper_prerelease_3.5.17/build32.sh release \
+RUN /wrapper_prerelease_3.5.17/build32.sh release \
     && tar -xvzf /wrapper_prerelease_3.5.17/dist/wrapper-linux-armhf-32-3.5.17.tar.gz \    
     && cp -r /sonarqube-5.6.6/bin/linux-x86-32/ /sonarqube-5.6.6/bin/linux-pi \    
     && cp -f /wrapper-linux-armhf-32-3.5.17/bin/wrapper /sonarqube-5.6.6/bin/linux-pi/wrapper \
