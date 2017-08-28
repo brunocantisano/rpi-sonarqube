@@ -23,10 +23,36 @@ The image exposes port `9000`. Also, exports two volumes: `/sonarqube-5.6.6/exte
 
 Use cases
 
+Environment variables
 ----
 
-1) If you'd like to run the container:
+1) This image uses environment variables to allow the configuration of some parameteres at run time:
+
+* Variable name: `DB_USER`
+* Default value: sonar
+* Accepted values: a valid user created in the database.
+* Description: database user.
+----
+
+* Variable name: `DB_PASS`
+* Default value: xaexohquaetiesoo
+* Accepted values: a valid password for the user created in the database.
+* Description: database password.
+----
+
+* Variable name: `DB_NAME`
+* Default value: sonar
+* Accepted values: database name where the container must connect.
+* Description: database name.
+----
+
+2) If you'd like to run the container:
 
 ```bash
-docker run --name sonar -it -p 9416:3000 paperinik/rpi-sonarqube
+docker run -d --name sonarqube \
+           -e DB_USER=sonar \
+           -e DB_PASS=xaexohquaetiesoo \
+           -e DB_NAME=sonar --link postgresql:db \
+           -p 9408:9000 \
+           paperinik/rpi-sonarqube:latest
 ```

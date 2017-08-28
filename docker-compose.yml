@@ -19,5 +19,5 @@ sonarqube:
     - DB_PASS=xaexohquaetiesoo
     - DB_NAME=sonar
   ports:
-    - "9400:9000"
+    - "9408:9000"
     - "443"
