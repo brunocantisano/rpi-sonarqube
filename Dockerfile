@@ -4,13 +4,14 @@ MAINTAINER Bruno Cantisano <bruno.cantisano@gmail.com>
 LABEL version latest
 LABEL description SonarQube Raspberry Pi 2 Container
 
+WORKDIR /
+
 RUN apt-get clean \
     && apt-get update \
     && apt-get install -y \
     build-essential \
     wget \
     unzip \
-    && cd / \
     && wget https://wrapper.tanukisoftware.com/download/3.5.17/wrapper_prerelease_3.5.17.tar.gz \
     && wget http://archive.apache.org/dist/ant/binaries/apache-ant-1.9.4-bin.tar.gz \
     && wget https://sonarsource.bintray.com/Distribution/sonarqube/sonarqube-5.6.6.zip \
@@ -33,7 +34,7 @@ RUN apt-get clean \
 ENV ANT_HOME /usr/share/ant
 ENV SONAR_SCANNER_OPTS -Xmx512m 
 ENV PATH $PATH:/sonar-scanner-3.0.3.778/bin 
- 
+
 RUN /wrapper_prerelease_3.5.17/build32.sh release \
     && tar -xvzf /wrapper_prerelease_3.5.17/dist/wrapper-linux-armhf-32-3.5.17.tar.gz \    
     && cp -r /sonarqube-5.6.6/bin/linux-x86-32/ /sonarqube-5.6.6/bin/linux-pi \    
@@ -45,14 +46,15 @@ RUN /wrapper_prerelease_3.5.17/build32.sh release \
 
 ENV ANT_HOME= 
 
-COPY files/init.sh /init.sh
-RUN chmod 755 /init.sh
+COPY files/entrypoint.sh /entrypoint.sh
+RUN chmod 755 /entrypoint.sh
 
-VOLUME /sonarqube-5.6.6/extensions /sonarqube-5.6.6/logs/
+WORKDIR /var/scanner
+VOLUME /sonarqube-5.6.6/extensions /sonarqube-5.6.6/logs/ /var/scanner
 
 #sonar port
 EXPOSE 9000
 
-ENTRYPOINT ["/init.sh"]
+ENTRYPOINT ["/entrypoint.sh"]
 
 CMD ["app:start"]
