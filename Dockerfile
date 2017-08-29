@@ -16,7 +16,6 @@ RUN apt-get clean \
     && wget http://archive.apache.org/dist/ant/binaries/apache-ant-1.9.4-bin.tar.gz && tar -xvzf apache-ant-1.9.4-bin.tar.gz && rm -f apache-ant-1.9.4-bin.tar.gz && mv apache-ant-1.9.4 /usr/share/ant \
     && wget https://sonarsource.bintray.com/Distribution/sonarqube/sonarqube-5.6.6.zip && unzip sonarqube-5.6.6.zip && rm -f sonarqube-5.6.6.zip \
     && wget https://sonarsource.bintray.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.0.3.778.zip && unzip sonar-scanner-cli-3.0.3.778.zip && rm -f sonar-scanner-cli-3.0.3.778.zip \
-    && wget https://github.com/SonarSource/sonar-scanner-msbuild/releases/download/3.0.2.656/sonar-scanner-msbuild-3.0.2.656.zip && unzip sonar-scanner-msbuild-3.0.2.656.zip && rm -f sonar-scanner-msbuild-3.0.2.656.zip \
     && wget https://sonarsource.bintray.com/Distribution/sonar-java-plugin/sonar-java-plugin-4.11.0.10660.jar -P sonarqube-5.6.6/extensions/plugins \
     && wget https://sonarsource.bintray.com/Distribution/sonar-scm-git-plugin/sonar-scm-git-plugin-1.2.jar -P sonarqube-5.6.6/extensions/plugins \
     && wget https://sonarsource.bintray.com/Distribution/sonar-github-plugin/sonar-github-plugin-1.4.1.822.jar -P sonarqube-5.6.6/extensions/plugins \

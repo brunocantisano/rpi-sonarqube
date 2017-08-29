@@ -66,19 +66,19 @@ docker run -e SONAR_HOST=192.168.1.30 \
            -it paperinik/rpi-sonarqube sonar-scanner
 ```
 
-Plugin Links:
-https://docs.sonarqube.org/display/PLUG/GitHub+Authentication+Plugin
-https://docs.sonarqube.org/display/PLUG/Git+Plugin
-https://docs.sonarqube.org/display/PLUG/SonarJava
-https://www.sonarsource.com/products/codeanalyzers/sonarcfamilyforcpp.html
-https://www.sonarsource.com/products/codeanalyzers/sonarphp.html
-https://www.sonarsource.com/products/codeanalyzers/sonarcsharp.html
-https://www.sonarsource.com/products/codeanalyzers/sonarplsql.html
-https://www.sonarsource.com/products/codeanalyzers/sonartsql.html
-https://www.sonarsource.com/products/codeanalyzers/sonarvb6.html
-https://www.sonarsource.com/products/codeanalyzers/sonarvbnet.html
-https://www.sonarsource.com/products/codeanalyzers/sonarweb.html
-https://www.sonarsource.com/products/codeanalyzers/sonarxml.html
-https://www.sonarsource.com/products/codeanalyzers/sonarts.html
-https://github.com/kalidasya/sonar-css-plugin
-https://github.com/ofields/sonar-android
+# Plugins:
+[GitHub Authentication Plugin](https://docs.sonarqube.org/display/PLUG/GitHub+Authentication+Plugin)
+[Git Plugin](https://docs.sonarqube.org/display/PLUG/Git+Plugin)
+[Sonar Java](https://docs.sonarqube.org/display/PLUG/SonarJava)
+[Sonar C Family for Cpp Plugin](https://www.sonarsource.com/products/codeanalyzers/sonarcfamilyforcpp.html)
+[Sonar Php Plugin](https://www.sonarsource.com/products/codeanalyzers/sonarphp.html)
+[Sonar C Sharp Plugin](https://www.sonarsource.com/products/codeanalyzers/sonarcsharp.html)
+[Sonar Pl Sql Plugin](https://www.sonarsource.com/products/codeanalyzers/sonarplsql.html)
+[Sonar TSql Plugin](https://www.sonarsource.com/products/codeanalyzers/sonartsql.html)
+[Sonar VB6 Plugin](https://www.sonarsource.com/products/codeanalyzers/sonarvb6.html)
+[Sonar VB Net Plugin](https://www.sonarsource.com/products/codeanalyzers/sonarvbnet.html)
+[Sonar Web Plugin](https://www.sonarsource.com/products/codeanalyzers/sonarweb.html)
+[Sonar Xml Plugin](https://www.sonarsource.com/products/codeanalyzers/sonarxml.html)
+[Sonar TS Plugin](https://www.sonarsource.com/products/codeanalyzers/sonarts.html)
+[Sonar CSS Plugin](https://github.com/kalidasya/sonar-css-plugin)
+[Sonar Android Plugin](https://github.com/ofields/sonar-android)
