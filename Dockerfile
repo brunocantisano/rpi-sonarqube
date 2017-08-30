@@ -4,7 +4,9 @@ MAINTAINER Bruno Cantisano <bruno.cantisano@gmail.com>
 LABEL version latest
 LABEL description SonarQube Raspberry Pi 2 Container
 
-WORKDIR /
+WORKDIR / \
+
+ENV LANGUAGE_VERSION 1.1
 
 RUN apt-get clean \
     && apt-get update \
@@ -15,12 +17,10 @@ RUN apt-get clean \
     && wget https://wrapper.tanukisoftware.com/download/3.5.17/wrapper_prerelease_3.5.17.tar.gz && tar -xvzf wrapper_prerelease_3.5.17.tar.gz && rm -f wrapper_prerelease_3.5.17.tar.gz \
     && wget http://archive.apache.org/dist/ant/binaries/apache-ant-1.9.4-bin.tar.gz && tar -xvzf apache-ant-1.9.4-bin.tar.gz && rm -f apache-ant-1.9.4-bin.tar.gz && mv apache-ant-1.9.4 /usr/share/ant \
     && wget https://sonarsource.bintray.com/Distribution/sonarqube/sonarqube-5.6.6.zip && unzip sonarqube-5.6.6.zip && rm -f sonarqube-5.6.6.zip \
-    && wget https://sonarsource.bintray.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.0.3.778.zip && unzip sonar-scanner-cli-3.0.3.778.zip && rm -f sonar-scanner-cli-3.0.3.778.zip \
-    && wget http://www.java2s.com/Code/JarDownload/sonar-l10n/sonar-l10n-pt-plugin-1.1.jar.zip && unzip /sonar-l10n-pt-plugin-1.1.jar.zip && rm -f sonar-l10n-pt-plugin-1.1.jar.zip && mv sonar-l10n-pt-plugin-1.1.jar /sonarqube-5.6.6/extensions/plugins 
+    && wget http://www.java2s.com/Code/JarDownload/sonar-l10n/sonar-l10n-pt-plugin-$LANGUAGE_VERSION.jar.zip && unzip /sonar-l10n-pt-plugin-$LANGUAGE_VERSION.jar.zip && rm -f sonar-l10n-pt-plugin-$LANGUAGE_VERSION.jar.zip \
+    && mv sonar-l10n-pt-plugin-$LANGUAGE_VERSION.jar /sonarqube-5.6.6/extensions/plugins 
 
 ENV ANT_HOME /usr/share/ant
-ENV SONAR_SCANNER_OPTS -Xmx512m 
-ENV PATH $PATH:/sonar-scanner-3.0.3.778/bin 
 
 RUN /wrapper_prerelease_3.5.17/build32.sh release \
     && tar -xvzf /wrapper_prerelease_3.5.17/dist/wrapper-linux-armhf-32-3.5.17.tar.gz \    
@@ -37,7 +37,7 @@ COPY files/entrypoint.sh /entrypoint.sh
 RUN chmod 755 /entrypoint.sh
 
 WORKDIR /var/scanner
-VOLUME /sonarqube-5.6.6/extensions /sonarqube-5.6.6/logs/ /var/scanner
+VOLUME /sonarqube-5.6.6/extensions /sonarqube-5.6.6/logs
 
 #sonar port
 EXPOSE 9000
