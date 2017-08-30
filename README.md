@@ -2,7 +2,7 @@
 
 ![docker_logo](https://raw.githubusercontent.com/brunocantisano/rpi-sonarqube/master/files/docker.png)![docker_sonar_logo](https://raw.githubusercontent.com/brunocantisano/rpi-sonarqube/master/files/logo-sonarqube.png)![docker_paperinik_logo](https://raw.githubusercontent.com/brunocantisano/rpi-sonarqube/master/files/docker_paperinik_120x120.png)
 
-This Docker container implements a Sonarqube Server with the Sonar Scanner.
+This Docker container implements a Sonarqube Server.
 
  * Raspbian base image.
  
@@ -55,15 +55,6 @@ docker run -d --name sonarqube \
            -e DB_NAME=sonar --link postgresql:db \
            -p 9408:9000 \
            paperinik/rpi-sonarqube:latest
-```
-
-3) If you'd like to run the scanner:
-
-```bash
-docker run -e SONAR_HOST=192.168.1.30 \
-           -e SONAR_PORT=9408 \
-           -v /media/usbraid/docker/sonar-scanner/sonarqube-scanner:/var/scanner \
-           -it paperinik/rpi-sonarqube sonar-scanner
 ```
 
 # Plugins:
