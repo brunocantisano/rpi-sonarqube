@@ -33,7 +33,7 @@ appStart () {
 }
 
 appStop () {
-  echo "Stopping mongodb..."
+  echo "Stopping sonarqube..."
   /sonarqube-5.6.6/bin/linux-pi/sonar.sh stop
 }
 
