@@ -46,7 +46,13 @@ Environment variables
 * Description: database name.
 ----
 
-2) If you'd like to run the container:
+* Variable name: `LANGUAGE_VERSION`
+* Default value: 1.1
+* Description: version of portuguese language plugin.
+----
+
+
+2) If you'd like to run the container, you must download the plugins to a folder and pass the folder path to the container as below:
 
 ```bash
 docker run -d --name sonarqube \
@@ -54,7 +60,9 @@ docker run -d --name sonarqube \
            -e DB_PASS=xaexohquaetiesoo \
            -e DB_NAME=sonar --link postgresql:db \
            -p 9408:9000 \
+           -v /media/usbraid/docker/sonar-scanner/plugins:/sonarqube-5.6.6/extensions/plugins \
            paperinik/rpi-sonarqube:latest
+
 ```
 
 # Plugins:

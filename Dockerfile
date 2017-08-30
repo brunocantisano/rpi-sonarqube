@@ -2,7 +2,7 @@ FROM paperinik/rpi-java8:latest
 MAINTAINER Bruno Cantisano <bruno.cantisano@gmail.com>
 
 LABEL version latest
-LABEL description SonarQube Raspberry Pi 2 Container
+LABEL description SonarQube Raspberry Pi Container
 
 WORKDIR / \
 
