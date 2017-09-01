@@ -7,7 +7,6 @@ LABEL description SonarQube Raspberry Pi Container
 ENV WRAPPER_VERION=3.5.17 \
     ANT_VERSION=1.9.4 \
     SONAR_VERSION=5.6.6 \
-    LANGUAGE_VERSION=1.1 \
     ANT_HOME=/usr/share/ant
 
 RUN apt-get clean \
@@ -20,16 +19,12 @@ RUN apt-get clean \
     && wget https://wrapper.tanukisoftware.com/download/${WRAPPER_VERION}/wrapper_prerelease_${WRAPPER_VERION}.tar.gz \
     && wget http://archive.apache.org/dist/ant/binaries/apache-ant-${ANT_VERSION}-bin.tar.gz \
     && wget https://sonarsource.bintray.com/Distribution/sonarqube/sonarqube-${SONAR_VERSION}.zip \        
-    && wget http://www.java2s.com/Code/JarDownload/sonar-l10n/sonar-l10n-pt-plugin-$LANGUAGE_VERSION.jar.zip \
     && tar -xvzf wrapper_prerelease_${WRAPPER_VERION}.tar.gz \
     && tar -xvzf apache-ant-${ANT_VERSION}-bin.tar.gz \
     && unzip sonarqube-${SONAR_VERSION}.zip \
-    && unzip sonar-l10n-pt-plugin-$LANGUAGE_VERSION.jar.zip \
     && rm -f wrapper_prerelease_${WRAPPER_VERION}.tar.gz \
     apache-ant-${ANT_VERSION}-bin.tar.gz \
     sonarqube-${SONAR_VERSION}.zip \
-    sonar-l10n-pt-plugin-$LANGUAGE_VERSION.jar.zip \
-    && mv sonar-l10n-pt-plugin-$LANGUAGE_VERSION.jar sonarqube-${SONAR_VERSION}/extensions/plugins \    
     && mv apache-ant-${ANT_VERSION} /usr/share/ant \
     && /wrapper_prerelease_${WRAPPER_VERION}/build32.sh release \
     && tar -xvzf /wrapper_prerelease_${WRAPPER_VERION}/dist/wrapper-linux-armhf-32-${WRAPPER_VERION}.tar.gz \    
