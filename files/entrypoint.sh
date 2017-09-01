@@ -26,15 +26,15 @@ appStart () {
   set +e
   if [ "${DB_TYPE}" = "MSSQL" ]; then
     # Configure microsoft sql server
-    sed -i 's|#sonar.jdbc.url=jdbc:sqlserver://localhost;databaseName=sonar|sonar.jdbc.url=jdbc:sqlserver://'"${DB_HOST}"';d$
+    sed -i 's|#sonar.jdbc.url=jdbc:sqlserver://localhost;databaseName=sonar|sonar.jdbc.url=jdbc:sqlserver://'"${DB_HOST}"';databaseName='"${DB_NAME}"'|g' /sonarqube-5.6.6/conf/sonar.properties
     #echo "mssql"
   elif [ "${DB_TYPE}" = "POSTGRES" ]; then
     # Configure postgres
-    sed -i 's|#sonar.jdbc.url=jdbc:postgresql://localhost/sonar|sonar.jdbc.url=jdbc:postgresql://'"${DB_HOST}"'/'"${DB_NAME}"$
+    sed -i 's|#sonar.jdbc.url=jdbc:postgresql://localhost/sonar|sonar.jdbc.url=jdbc:postgresql://'"${DB_HOST}"'/'"${DB_NAME}"'|g' /sonarqube-5.6.6/conf/sonar.properties
     #echo "postgres"
-  else
+  elif [ "${DB_TYPE}" = "MYSQL" ]; then
     # Configure mysql
-    sed -i 's|#sonar.jdbc.url=jdbc:mysql://localhost:3306/sonar|sonar.jdbc.url=jdbc:mysql://'"${DB_HOST}"'/'"${DB_NAME}"'|g' $
+    sed -i 's|#sonar.jdbc.url=jdbc:mysql://localhost:3306/sonar|sonar.jdbc.url=jdbc:mysql://'"${DB_HOST}"'/'"${DB_NAME}"'|g' /sonarqube-5.6.6/conf/sonar.properties
     #echo "mysql"
   fi
   /sonarqube-5.6.6/bin/linux-pi/sonar.sh start
