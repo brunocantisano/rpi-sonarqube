@@ -32,10 +32,6 @@ else
   sed -i 's|#sonar.jdbc.url=jdbc:mysql://localhost:3306/sonar|sonar.jdbc.url=jdbc:mysql://'"${DB_HOST}"'/'"${DB_NAME}"'|g' /sonarqube-5.6.6/conf/sonar.properties
 fi
 
-# Configure sonar-scanner.properties
-sed -i 's|#sonar.host.url=http://localhost:9000|sonar.host.url=http://'"${SONAR_HOST}"':'"${SONAR_PORT}"'|g' /sonar-scanner-3.0.3.778/conf/sonar-scanner.properties
-sed -i 's|#sonar|sonar|g' /sonar-scanner-3.0.3.778/conf/sonar-scanner.properties
-
 appStart () {
   echo "Starting sonarqube..."
   set +e
