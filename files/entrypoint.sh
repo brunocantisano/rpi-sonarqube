@@ -21,10 +21,10 @@ sed -i 's|#sonar.jdbc.username=|sonar.jdbc.username='"${DB_USER}"'|g' /sonarqube
 sed -i 's|#sonar.jdbc.password=|sonar.jdbc.password='"${DB_PASS}"'|g' /sonarqube-5.6.6/conf/sonar.properties
 sed -i 's|sonar.jdbc.url=jdbc:h2|#sonar.jdbc.url=jdbc:h2|g' /sonarqube-5.6.6/conf/sonar.properties
 
-if [ ${DB_USER} eq 3 ]; then
+if [ ${DB_TYPE} eq 3 ]; then
   # Configure sql server
   sed -i 's|#sonar.jdbc.url=jdbc:sqlserver://localhost;databaseName=sonar|sonar.jdbc.url=jdbc:sqlserver://'"${DB_HOST}"';databaseName='"${DB_NAME}"'|g' /sonarqube-5.6.6/conf/sonar.properties
-else if [ ${DB_USER} eq 2 ]; then
+else if [ ${DB_TYPE} eq 2 ]; then
   # Configure postgres
   sed -i 's|#sonar.jdbc.url=jdbc:postgresql://localhost/sonar|sonar.jdbc.url=jdbc:postgresql://'"${DB_HOST}"'/'"${DB_NAME}"'|g' /sonarqube-5.6.6/conf/sonar.properties
 else
