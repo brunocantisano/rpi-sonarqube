@@ -1,12 +1,14 @@
-FROM paperinik/rpi-java8:latest
+FROM paperinik/rpi-java8
 MAINTAINER Bruno Cantisano <bruno.cantisano@gmail.com>
 
 LABEL version latest
 LABEL description SonarQube Raspberry Pi Container
 
-WORKDIR / \
-
-ENV LANGUAGE_VERSION 1.1
+ENV WRAPPER_VERION=3.5.17 \
+    ANT_VERSION=1.9.4 \
+    SONAR_VERSION=5.6.6 \
+    LANGUAGE_VERSION=1.1 \
+    ANT_HOME=/usr/share/ant
 
 RUN apt-get clean \
     && apt-get update \
@@ -14,38 +16,38 @@ RUN apt-get clean \
     build-essential \
     wget \
     unzip \
-    && wget https://wrapper.tanukisoftware.com/download/3.5.17/wrapper_prerelease_3.5.17.tar.gz \
-    && tar -xvzf wrapper_prerelease_3.5.17.tar.gz \
-    && rm -f wrapper_prerelease_3.5.17.tar.gz \
-    && wget http://archive.apache.org/dist/ant/binaries/apache-ant-1.9.4-bin.tar.gz \
-    && tar -xvzf apache-ant-1.9.4-bin.tar.gz \
-    && rm -f apache-ant-1.9.4-bin.tar.gz \
-    && mv apache-ant-1.9.4 /usr/share/ant \
-    && wget https://sonarsource.bintray.com/Distribution/sonarqube/sonarqube-5.6.6.zip \
-    && unzip sonarqube-5.6.6.zip \
-    && rm -f sonarqube-5.6.6.zip \
+    && cd / \
+    && wget https://wrapper.tanukisoftware.com/download/${WRAPPER_VERION}/wrapper_prerelease_${WRAPPER_VERION}.tar.gz \
+    && wget http://archive.apache.org/dist/ant/binaries/apache-ant-${ANT_VERSION}-bin.tar.gz \
+    && wget https://sonarsource.bintray.com/Distribution/sonarqube/sonarqube-${SONAR_VERSION}.zip \        
     && wget http://www.java2s.com/Code/JarDownload/sonar-l10n/sonar-l10n-pt-plugin-$LANGUAGE_VERSION.jar.zip \
+    && tar -xvzf wrapper_prerelease_${WRAPPER_VERION}.tar.gz \
+    && tar -xvzf apache-ant-${ANT_VERSION}-bin.tar.gz \
+    && unzip sonarqube-${SONAR_VERSION}.zip \
     && unzip sonar-l10n-pt-plugin-$LANGUAGE_VERSION.jar.zip \
-    && rm -f sonar-l10n-pt-plugin-$LANGUAGE_VERSION.jar.zip \
-    && mv sonar-l10n-pt-plugin-$LANGUAGE_VERSION.jar /sonarqube-5.6.6/extensions/plugins 
-
-ENV ANT_HOME /usr/share/ant
-
-RUN /wrapper_prerelease_3.5.17/build32.sh release \
-    && tar -xvzf /wrapper_prerelease_3.5.17/dist/wrapper-linux-armhf-32-3.5.17.tar.gz \    
-    && cp -r /sonarqube-5.6.6/bin/linux-x86-32/ /sonarqube-5.6.6/bin/linux-pi \    
-    && cp -f /wrapper-linux-armhf-32-3.5.17/bin/wrapper /sonarqube-5.6.6/bin/linux-pi/wrapper \
-    && cp -f /wrapper-linux-armhf-32-3.5.17/lib/libwrapper.so /sonarqube-5.6.6/bin/linux-pi/lib/libwrapper.so \
-    && cp -f /wrapper-linux-armhf-32-3.5.17/lib/wrapper.jar /sonarqube-5.6.6/lib/wrapper-3.5.17.jar \    
+    && rm -f wrapper_prerelease_${WRAPPER_VERION}.tar.gz \
+    apache-ant-${ANT_VERSION}-bin.tar.gz \
+    sonarqube-${SONAR_VERSION}.zip \
+    sonar-l10n-pt-plugin-$LANGUAGE_VERSION.jar.zip \
+    && mv sonar-l10n-pt-plugin-$LANGUAGE_VERSION.jar sonarqube-${SONAR_VERSION}/extensions/plugins \    
+    && mv apache-ant-${ANT_VERSION} /usr/share/ant \
+    && /wrapper_prerelease_${WRAPPER_VERION}/build32.sh release \
+    && tar -xvzf /wrapper_prerelease_${WRAPPER_VERION}/dist/wrapper-linux-armhf-32-${WRAPPER_VERION}.tar.gz \    
+    && cp -r /sonarqube-${SONAR_VERSION}/bin/linux-x86-32/ /sonarqube-${SONAR_VERSION}/bin/linux-pi \    
+    && cp -f /wrapper-linux-armhf-32-${WRAPPER_VERION}/bin/wrapper /sonarqube-${SONAR_VERSION}/bin/linux-pi/wrapper \
+    && cp -f /wrapper-linux-armhf-32-${WRAPPER_VERION}/lib/libwrapper.so /sonarqube-${SONAR_VERSION}/bin/linux-pi/lib/libwrapper.so \
+    && cp -f /wrapper-linux-armhf-32-${WRAPPER_VERION}/lib/wrapper.jar /sonarqube-${SONAR_VERSION}/lib/wrapper-${WRAPPER_VERION}.jar \    
     && apt-get purge --auto-remove build-essential wget unzip \
-    && rm -rf /wrapper_prerelease_3.5.17 /wrapper-linux-armhf-32-3.5.17 /usr/share/ant /var/lib/apt/lists/*
+    && rm -rf /wrapper_prerelease_${WRAPPER_VERION} /wrapper-linux-armhf-32-${WRAPPER_VERION} /usr/share/ant /var/lib/apt/lists/*
 
 ENV ANT_HOME= 
+
+WORKDIR /
 
 COPY files/entrypoint.sh /entrypoint.sh
 RUN chmod 755 /entrypoint.sh
 
-VOLUME /sonarqube-5.6.6/extensions /sonarqube-5.6.6/logs
+VOLUME /sonarqube-${SONAR_VERSION}/extensions /sonarqube-${SONAR_VERSION}/logs/
 
 #sonar port
 EXPOSE 9000

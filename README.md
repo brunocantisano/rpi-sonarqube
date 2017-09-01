@@ -46,6 +46,12 @@ Environment variables
 * Description: database name.
 ----
 
+* Variable name: `DB_TYPE`
+* Default value: 1
+* Accepted values: database type. 1=mysql, 2=postgres, 3=sqlserver
+* Description: database type.
+----
+
 * Variable name: `LANGUAGE_VERSION`
 * Default value: 1.1
 * Description: version of portuguese language plugin.
@@ -59,6 +65,7 @@ docker run -d --name sonarqube \
            -e DB_USER=sonar \
            -e DB_PASS=xaexohquaetiesoo \
            -e DB_NAME=sonar --link postgresql:db \
+           -e DB_TYPE=2 \
            -p 9408:9000 \
            -v /media/usbraid/docker/sonar-scanner/plugins:/sonarqube-5.6.6/extensions/plugins \
            paperinik/rpi-sonarqube:latest
