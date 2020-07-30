@@ -1,6 +1,6 @@
 .PHONY: default build remove rebuild save load tag push publish pull run stop
 
-DOCKER_IMAGE_VERSION=5.6.6
+DOCKER_IMAGE_VERSION=7.0
 IMAGE_NAME=rpi-sonarqube
 CONTAINER_PORT=9408
 OWNER=paperinik
