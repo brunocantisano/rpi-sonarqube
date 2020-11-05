@@ -1,5 +1,5 @@
 postgresql:
-  image: tobi312/rpi-postgresql:9.4
+  image: postgres:alpine
   environment:
     - POSTGRES_USER=sonar
     - POSTGRES_PASSWORD=xaexohquaetiesoo
@@ -9,9 +9,7 @@ postgresql:
   ports:
     - "5432:5432"
 sonarqube:
-  image: paperinik/rpi-sonarqube:latest
-#  build: ./
-#  dockerfile: Dockerfile
+  build: .
   links:
     - postgresql:db
   environment:

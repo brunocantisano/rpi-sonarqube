@@ -27,29 +27,26 @@ RUN cd / \
     apache-ant-${ANT_VERSION}-bin.tar.gz \
     sonarqube-${SONAR_VERSION}.zip \
     && mv apache-ant-${ANT_VERSION} /usr/share/ant \
-    && /wrapper_prerelease_${WRAPPER_VERSION}/build32.sh release
+    && /wrapper_prerelease_${WRAPPER_VERSION}/build32.sh release \
+    && cp -r /sonarqube-${SONAR_VERSION}/bin/linux-x86-32/ /sonarqube-${SONAR_VERSION}/bin/linux-pi \
+    && cp -f /wrapper_prerelease_${WRAPPER_VERSION}/bin/wrapper /sonarqube-${SONAR_VERSION}/bin/linux-pi/wrapper \
+    && cp -f /wrapper_prerelease_${WRAPPER_VERSION}/lib/libwrapper.so /sonarqube-${SONAR_VERSION}/bin/linux-pi/lib/libwrapper.so \
+    && cp -f /wrapper_prerelease_${WRAPPER_VERSION}/lib/wrapper.jar /sonarqube-${SONAR_VERSION}/lib/wrapper-${WRAPPER_VERSION}.jar \    
+    && apt-get purge --auto-remove build-essential wget unzip \
+    && rm -rf /wrapper_prerelease_${WRAPPER_VERSION} /wrapper-linux-armhf-32-${WRAPPER_VERION} /usr/share/ant /var/lib/apt/lists/*
 
-RUN tar -xvzf /wrapper_prerelease_${WRAPPER_VERSION}/dist/wrapper-linux-armhf-32-${WRAPPER_VERSION}.tar.gz
+ENV ANT_HOME= 
 
-#RUN cp -r /sonarqube-${SONAR_VERSION}/bin/linux-x86-32/ /sonarqube-${SONAR_VERSION}/bin/linux-pi \    
-#    && cp -f /wrapper-linux-armhf-32-${WRAPPER_VERSION}/bin/wrapper /sonarqube-${SONAR_VERSION}/bin/linux-pi/wrapper \
-#    && cp -f /wrapper-linux-armhf-32-${WRAPPER_VERSION}/lib/libwrapper.so /sonarqube-${SONAR_VERSION}/bin/linux-pi/lib/libwrapper.so \
-#    && cp -f /wrapper-linux-armhf-32-${WRAPPER_VERSION}/lib/wrapper.jar /sonarqube-${SONAR_VERSION}/lib/wrapper-${WRAPPER_VERSION}.jar \    
-#    && apt-get purge --auto-remove build-essential wget unzip \
-#    && rm -rf /wrapper_prerelease_${WRAPPER_VERSION} /wrapper-linux-armhf-32-${WRAPPER_VERION} /usr/share/ant /var/lib/apt/lists/*
+WORKDIR /
 
-#ENV ANT_HOME= 
+COPY files/entrypoint.sh /entrypoint.sh
+RUN chmod 755 /entrypoint.sh
 
-#WORKDIR /
-
-#COPY files/entrypoint.sh /entrypoint.sh
-#RUN chmod 755 /entrypoint.sh
-
-#VOLUME /sonarqube-${SONAR_VERSION}/extensions /sonarqube-${SONAR_VERSION}/logs/
+VOLUME /sonarqube-${SONAR_VERSION}/extensions /sonarqube-${SONAR_VERSION}/logs/
 
 #sonar port
-#EXPOSE 9000
+EXPOSE 9000
 
-#ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/entrypoint.sh"]
 
-#CMD ["app:start"]
+CMD ["app:start"]

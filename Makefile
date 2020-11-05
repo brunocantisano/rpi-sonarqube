@@ -51,7 +51,8 @@ pull:
 	docker pull $(NEXUS_REPO)/$(TAG)
 
 run:
-	docker run -d --name ${IMAGE_NAME} -e DB_USER=sonar -e DB_PASS=xaexohquaetiesoo -e DB_NAME=sonar --link postgresql:db -e DB_TYPE=POSTGRES -p ${CONTAINER_PORT}:9000 -v `pwd`/sonar-scanner/plugins:/sonarqube-5.6.6/extensions/plugins ${NEXUS_REPO}/${TAG}
+	docker-compose build
+	docker-compose up -d
 
 stop:
 	docker stop ${IMAGE_NAME} && docker rm ${IMAGE_NAME}
