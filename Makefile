@@ -1,7 +1,8 @@
 .PHONY: default build remove rebuild save load tag push publish pull run stop
 
-DOCKER_IMAGE_VERSION=7.0
+DOCKER_IMAGE_VERSION=7.6
 IMAGE_NAME=rpi-sonarqube
+CONTAINER_NAME=sonarqube
 CONTAINER_PORT=9408
 OWNER=paperinik
 PORT=9413
@@ -24,7 +25,7 @@ default:
 	build
 
 build:
-	docker build -t $(DOCKER_IMAGE_TAGNAME) .
+	docker build -t $(DOCKER_IMAGE_TAGNAME) --build-arg SONAR_VERSION=$(DOCKER_IMAGE_VERSION) .
 
 remove:
 	docker rmi -f $(DOCKER_IMAGE_TAGNAME)
@@ -51,8 +52,9 @@ pull:
 	docker pull $(NEXUS_REPO)/$(TAG)
 
 run:
-	docker run -d --name ${IMAGE_NAME} -e DB_USER=sonar -e DB_PASS=xaexohquaetiesoo -e DB_NAME=sonar --link postgresql:db -e DB_TYPE=POSTGRES -p ${CONTAINER_PORT}:9000 -v `pwd`/sonar-scanner/plugins:/sonarqube-5.6.6/extensions/plugins ${NEXUS_REPO}/${TAG}
+	docker run -u 0 -d --name ${CONTAINER_NAME} -p ${CONTAINER_PORT}:9000 -v `pwd`/sonar-scanner/plugins:/sonarqube-$(DOCKER_IMAGE_VERSION)/extensions/plugins ${NEXUS_REPO}/${TAG}
 
 stop:
 	docker stop ${IMAGE_NAME} && docker rm ${IMAGE_NAME}
+
 

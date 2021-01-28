@@ -1,13 +1,28 @@
-FROM paperinik/rpi-java8
+FROM paperinik/rpi-java:8
 MAINTAINER Bruno Cantisano <bruno.cantisano@gmail.com>
 
 LABEL version latest
 LABEL description SonarQube Raspberry Pi Container
 
+ARG SONAR_VERSION 
+     
 ENV WRAPPER_VERSION=3.5.43 \
     ANT_VERSION=1.10.8 \
-    SONAR_VERSION=7.0 \
-    ANT_HOME=/usr/share/ant
+    ANT_HOME=/usr/share/ant \
+    SONARQUBE_VERSION=${SONAR_VERSION} \
+    SONARQUBE_HOME=/sonarqube-${SONAR_VERSION} \
+    # Database configuration
+    # Defaults to using H2
+    # DEPRECATED. Use -v sonar.jdbc.username=... instead
+    # Drop these in the next release, also in the run script
+    SONARQUBE_JDBC_USERNAME=sonar \
+    SONARQUBE_JDBC_PASSWORD=sonar \
+    SONARQUBE_JDBC_URL=
+
+# Http port
+EXPOSE 9000
+
+RUN groupadd -r sonarqube && useradd -r -g sonarqube sonarqube
 
 RUN apt-get clean \
     && apt-get update \
@@ -31,25 +46,21 @@ RUN cd / \
 
 RUN tar -xvzf /wrapper_prerelease_${WRAPPER_VERSION}/dist/wrapper-linux-armhf-32-${WRAPPER_VERSION}.tar.gz
 
-#RUN cp -r /sonarqube-${SONAR_VERSION}/bin/linux-x86-32/ /sonarqube-${SONAR_VERSION}/bin/linux-pi \    
-#    && cp -f /wrapper-linux-armhf-32-${WRAPPER_VERSION}/bin/wrapper /sonarqube-${SONAR_VERSION}/bin/linux-pi/wrapper \
-#    && cp -f /wrapper-linux-armhf-32-${WRAPPER_VERSION}/lib/libwrapper.so /sonarqube-${SONAR_VERSION}/bin/linux-pi/lib/libwrapper.so \
-#    && cp -f /wrapper-linux-armhf-32-${WRAPPER_VERSION}/lib/wrapper.jar /sonarqube-${SONAR_VERSION}/lib/wrapper-${WRAPPER_VERSION}.jar \    
-#    && apt-get purge --auto-remove build-essential wget unzip \
-#    && rm -rf /wrapper_prerelease_${WRAPPER_VERSION} /wrapper-linux-armhf-32-${WRAPPER_VERION} /usr/share/ant /var/lib/apt/lists/*
+RUN cp -r /sonarqube-${SONAR_VERSION}/bin/linux-x86-32/ /sonarqube-${SONAR_VERSION}/bin/linux-pi \
+    && cp -f /wrapper-linux-armhf-32-${WRAPPER_VERSION}/bin/wrapper /sonarqube-${SONAR_VERSION}/bin/linux-pi/wrapper \
+    && cp -f /wrapper-linux-armhf-32-${WRAPPER_VERSION}/lib/libwrapper.so /sonarqube-${SONAR_VERSION}/bin/linux-pi/lib/libwrapper.so \
+    && cp -f /wrapper-linux-armhf-32-${WRAPPER_VERSION}/lib/wrapper.jar /sonarqube-${SONAR_VERSION}/lib/wrapper-${WRAPPER_VERSION}.jar \
+    && apt-get purge --auto-remove build-essential wget unzip \
+    && rm -rf /wrapper_prerelease_${WRAPPER_VERSION} /wrapper-linux-armhf-32-${WRAPPER_VERION} /usr/share/ant /var/lib/apt/lists/*
 
-#ENV ANT_HOME= 
+ENV ANT_HOME= 
 
-#WORKDIR /
+VOLUME $SONARQUBE_HOME/data $SONARQUBE_HOME/extensions $SONARQUBE_HOME/logs/
 
-#COPY files/entrypoint.sh /entrypoint.sh
-#RUN chmod 755 /entrypoint.sh
+WORKDIR $SONARQUBE_HOME
 
-#VOLUME /sonarqube-${SONAR_VERSION}/extensions /sonarqube-${SONAR_VERSION}/logs/
+COPY files/entrypoint.sh $SONARQUBE_HOME/bin/
 
-#sonar port
-#EXPOSE 9000
+USER sonarqube
 
-#ENTRYPOINT ["/entrypoint.sh"]
-
-#CMD ["app:start"]
+ENTRYPOINT ["./bin/entrypoint.sh"]

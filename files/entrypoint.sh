@@ -1,82 +1,32 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
 set -e
 
-trap appStop SIGINT SIGTERM
+if [ "${1:0:1}" != '-' ]; then
+  exec "$@"
+fi
 
-# Variables
-DB_HOST=${DB_HOST:-db}
-DB_NAME=${DB_NAME:-sonar}
-DB_USER=${DB_USER:-sonar}
-DB_PASS=${DB_PASS:-xaexohquaetiesoo}
-DB_TYPE=${DB_TYPE:-MYSQL}
-SONAR_HOST=${SONAR_HOST:-localhost}
-SONAR_PORT=${SONAR_PORT:-9000}
+# Parse Docker env vars to customize SonarQube
+#
+# e.g. Setting the env var sonar.jdbc.username=foo
+#
+# will cause SonarQube to be invoked with -Dsonar.jdbc.username=foo
 
-# Configure wrapper.conf
-sed -i 's/wrapper.java.command=java/wrapper.java.command=\/usr\/lib\/jvm\/jdk-8-oracle-arm32-vfp-hflt\/bin\/java/' /sonarqube-5.6.6/conf/wrapper.conf
-sed -i 's|#wrapper.java.additional.6=-server|wrapper.java.additional.6=-server|g' /sonarqube-5.6.6/conf/wrapper.conf
+declare -a sq_opts
 
-# Configure sonar.properties
-sed -i 's|#sonar.jdbc.username=|sonar.jdbc.username='"${DB_USER}"'|g' /sonarqube-5.6.6/conf/sonar.properties
-sed -i 's|#sonar.jdbc.password=|sonar.jdbc.password='"${DB_PASS}"'|g' /sonarqube-5.6.6/conf/sonar.properties
-sed -i 's|sonar.jdbc.url=jdbc:h2|#sonar.jdbc.url=jdbc:h2|g' /sonarqube-5.6.6/conf/sonar.properties
-
-appStart () {
-  echo "Starting sonarqube..."
-  set +e
-  if [ "${DB_TYPE}" = "MSSQL" ]; then
-    # Configure microsoft sql server
-    sed -i 's|#sonar.jdbc.url=jdbc:sqlserver://localhost;databaseName=sonar|sonar.jdbc.url=jdbc:sqlserver://'"${DB_HOST}"';databaseName='"${DB_NAME}"'|g' /sonarqube-5.6.6/conf/sonar.properties
-    #echo "mssql"
-  elif [ "${DB_TYPE}" = "POSTGRES" ]; then
-    # Configure postgres
-    sed -i 's|#sonar.jdbc.url=jdbc:postgresql://localhost/sonar|sonar.jdbc.url=jdbc:postgresql://'"${DB_HOST}"'/'"${DB_NAME}"'|g' /sonarqube-5.6.6/conf/sonar.properties
-    #echo "postgres"
-  elif [ "${DB_TYPE}" = "MYSQL" ]; then
-    # Configure mysql
-    sed -i 's|#sonar.jdbc.url=jdbc:mysql://localhost:3306/sonar|sonar.jdbc.url=jdbc:mysql://'"${DB_HOST}"'/'"${DB_NAME}"'|g' /sonarqube-5.6.6/conf/sonar.properties
-    #echo "mysql"
-  fi
-  /sonarqube-5.6.6/bin/linux-pi/sonar.sh start
-  tail -f /sonarqube-5.6.6/logs/sonar.log
-}
-
-appStop () {
-  echo "Stopping sonarqube..."
-  /sonarqube-5.6.6/bin/linux-pi/sonar.sh stop
-}
-
-appHelp () {
-  echo "Available options:"
-  echo " app:start          - Starts the sonarqube server (default)"
-  echo " app:stop           - Stops the sonarqube server"
-  echo " app:help           - Displays the help"
-  echo " [command]          - Execute the specified linux command eg. bash."
-}
-
-case "$1" in
-  app:start)
-    appStart
-    ;;
-  app:stop)
-    appStop
-    ;;
- app:help)
-    appHelp
-    ;;
-  *)
-    if [ -x $1 ]; then
-      $1
-    else
-      prog=$(which $1)
-      if [ -n "${prog}" ] ; then
-        shift 1
-        $prog $@
-      else
-        appHelp
-      fi
+while IFS='=' read -r envvar_key envvar_value
+do
+    if [[ "$envvar_key" =~ sonar.* ]]; then
+        sq_opts+=("-D${envvar_key}=${envvar_value}")
     fi
-    ;;
-esac
+done < <(env)
 
-exit 0
+exec java -jar lib/sonar-application-$SONARQUBE_VERSION.jar \
+  -Dsonar.log.console=true \
+  -Dsonar.jdbc.username="$SONARQUBE_JDBC_USERNAME" \
+  -Dsonar.jdbc.password="$SONARQUBE_JDBC_PASSWORD" \
+  -Dsonar.jdbc.url="$SONARQUBE_JDBC_URL" \
+  -Dsonar.web.javaAdditionalOpts="$SONARQUBE_WEB_JVM_OPTS -Djava.security.egd=file:/dev/./urandom" \
+  "${sq_opts[@]}" \
+  "$@"
+
