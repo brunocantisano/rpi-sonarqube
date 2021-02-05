@@ -18,6 +18,7 @@ sonarqube:
     - DB_USER=sonar
     - DB_PASS=xaexohquaetiesoo
     - DB_NAME=sonar
+    - DB_TYPE=POSTGRES
   ports:
     - "9408:9000"
     - "443"
