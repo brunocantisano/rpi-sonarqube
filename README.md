@@ -1,7 +1,6 @@
 # Sonarqube
 
-![docker_logo](https://raw.githubusercontent.com/brunocantisano/rpi-sonarqube/master/files/docker.png)![docker_sonar_logo](https://raw.githubusercontent.com/brunocantisano/rpi-sonarqube/master/files/logo-sonarqube.png)![docker_paperinik_logo](https://raw.githubusercontent.com/brunocantisano/rpi-sonarqube/master/files/docker_paperinik_120x120.png)
-
+![Raspberry Pi 4](files/raspberry.png)
 This Docker container implements a Sonarqube Server.
 
  * Raspbian base image.
