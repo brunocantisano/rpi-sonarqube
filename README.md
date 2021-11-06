@@ -1,5 +1,7 @@
 # Sonarqube
 
+![rpi-sonarqube](https://img.shields.io/docker/pulls/paperinik/rpi-sonarqube)
+
 ![Raspberry Pi 4](files/raspberry.png)
 This Docker container implements a Sonarqube Server.
 
