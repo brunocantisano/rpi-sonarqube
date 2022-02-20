@@ -1,4 +1,5 @@
-FROM paperinik/rpi-java:8
+FROM balenalib/raspberry-pi-openjdk:8-stretch
+
 MAINTAINER Bruno Cantisano <bruno.cantisano@gmail.com>
 
 LABEL version latest
@@ -6,8 +7,8 @@ LABEL description SonarQube Raspberry Pi Container
 
 ARG SONAR_VERSION 
      
-ENV WRAPPER_VERSION=3.5.43 \
-    ANT_VERSION=1.10.8 \
+ENV WRAPPER_VERSION=3.5.49 \
+    ANT_VERSION=1.10.12 \
     ANT_HOME=/usr/share/ant \
     SONARQUBE_VERSION=${SONAR_VERSION} \
     SONARQUBE_HOME=/sonarqube-${SONAR_VERSION} \
@@ -42,11 +43,9 @@ RUN cd / \
     apache-ant-${ANT_VERSION}-bin.tar.gz \
     sonarqube-${SONAR_VERSION}.zip \
     && mv apache-ant-${ANT_VERSION} /usr/share/ant \
-    && /wrapper_prerelease_${WRAPPER_VERSION}/build32.sh release
-
-RUN tar -xvzf /wrapper_prerelease_${WRAPPER_VERSION}/dist/wrapper-linux-armhf-32-${WRAPPER_VERSION}.tar.gz
-
-RUN cp -r /sonarqube-${SONAR_VERSION}/bin/linux-x86-32/ /sonarqube-${SONAR_VERSION}/bin/linux-pi \
+    && /wrapper_prerelease_${WRAPPER_VERSION}/build32.sh release \
+    && tar -xvzf /wrapper_prerelease_${WRAPPER_VERSION}/dist/wrapper-linux-armhf-32-${WRAPPER_VERSION}.tar.gz \
+    && cp -r /sonarqube-${SONAR_VERSION}/bin/linux-x86-64/ /sonarqube-${SONAR_VERSION}/bin/linux-pi \
     && cp -f /wrapper-linux-armhf-32-${WRAPPER_VERSION}/bin/wrapper /sonarqube-${SONAR_VERSION}/bin/linux-pi/wrapper \
     && cp -f /wrapper-linux-armhf-32-${WRAPPER_VERSION}/lib/libwrapper.so /sonarqube-${SONAR_VERSION}/bin/linux-pi/lib/libwrapper.so \
     && cp -f /wrapper-linux-armhf-32-${WRAPPER_VERSION}/lib/wrapper.jar /sonarqube-${SONAR_VERSION}/lib/wrapper-${WRAPPER_VERSION}.jar \
