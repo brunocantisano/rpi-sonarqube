@@ -1,4 +1,4 @@
-FROM balenalib/raspberry-pi-openjdk:8-stretch
+FROM balenalib/aio-3288c-openjdk:11-buster-build
 
 MAINTAINER Bruno Cantisano <bruno.cantisano@gmail.com>
 
@@ -54,12 +54,14 @@ RUN cd / \
 
 ENV ANT_HOME= 
 
-VOLUME $SONARQUBE_HOME/data $SONARQUBE_HOME/extensions $SONARQUBE_HOME/logs/
-
 WORKDIR $SONARQUBE_HOME
 
 COPY files/entrypoint.sh $SONARQUBE_HOME/bin/
 
+RUN chown sonarqube:sonarqube -R $SONARQUBE_HOME
+
 USER sonarqube
+
+VOLUME $SONARQUBE_HOME/data $SONARQUBE_HOME/extensions $SONARQUBE_HOME/logs/
 
 ENTRYPOINT ["./bin/entrypoint.sh"]

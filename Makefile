@@ -1,6 +1,6 @@
 .PHONY: default build remove rebuild save load tag push publish pull run stop
 
-DOCKER_IMAGE_VERSION=8.9.7.52159
+DOCKER_IMAGE_VERSION=9.3.0.51899
 IMAGE_NAME=rpi-sonarqube
 CONTAINER_NAME=sonarqube
 CONTAINER_PORT=9408
@@ -52,8 +52,7 @@ pull:
 	docker pull $(NEXUS_REPO)/$(TAG)
 
 run:
-	docker run -u 0 -d --name ${CONTAINER_NAME} -p ${CONTAINER_PORT}:9000 -v `pwd`/sonar-scanner/plugins:/sonarqube-$(DOCKER_IMAGE_VERSION)/extensions/plugins ${NEXUS_REPO}/${TAG}
-
+	docker run --rm -u sonarqube -d --name ${CONTAINER_NAME} -p ${CONTAINER_PORT}:9000 -v ~/projetos/dados/sonar-scanner/plugins:/sonarqube-$(DOCKER_IMAGE_VERSION)/extensions/plugins ${NEXUS_REPO}/${TAG}
 stop:
 	docker stop ${IMAGE_NAME} && docker rm ${IMAGE_NAME}
 
