@@ -1,5 +1,6 @@
 # Sonarqube
 
+[![Docker Stars](https://img.shields.io/docker/stars/paperinik/rpi-sonarqube.svg)](https://hub.docker.com/r/paperinik/rpi-sonarqube/)
 ![rpi-sonarqube](https://img.shields.io/docker/pulls/paperinik/rpi-sonarqube)
 
 ![Raspberry Pi 4](files/raspberry.png)
