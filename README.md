@@ -31,24 +31,22 @@ Environment variables
 1) This image uses environment variables to allow the configuration of some parameteres at run time:
 
 * Variable name: `SONARQUBE_JDBC_USERNAME`
-* Default value: sonar
 * Accepted values: a valid user created in the database.
 * Description: database user.
 
 ----
 
 * Variable name: `SONARQUBE_JDBC_PASSWORD`
-* Default value: xaexohquaetiesoo
 * Accepted values: a valid password for the user created in the database.
 * Description: database password.
 
 ----
 
 * Variable name: `SONARQUBE_JDBC_URL`
-* Default value: jdbc:postgresql://localhost:5432/sonar"
+* Postgres example: jdbc:postgresql://localhost:5432/sonar
 * Accepted values: jdbc database url where the container must connect.
-* Description: database name.
-
+* Description: database url **(sonar database needs to be created previously)**.
+* Command to create database in postgres (or any other database): `create database sonar;`
 ----
 
 
