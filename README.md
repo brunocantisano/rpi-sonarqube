@@ -6,7 +6,7 @@
 ![Raspberry Pi 4](files/raspberry.png)
 This Docker container implements a Sonarqube Server.
 
- * Raspbian base image.
+ * balenalib/aio-3288c-ubuntu-openjdk:xenial base image.
  
 ### Installation from [Docker registry hub](https://registry.hub.docker.com/u/paperinik/rpi-sonarqube/).
 
@@ -21,7 +21,7 @@ docker pull paperinik/rpi-sonarqube
 Exposed ports and volumes
 ----
 
-The image exposes port `9000`. Also, exports two volumes: `/sonarqube-5.6.6/extensions` and `/sonarqube-5.6.6/logs/`, used to store all the plugins and the other is used to store the sonarqube logs.
+The image exposes port `9000`. Also, exports four volumes: `/sonarqube-9.3.0.51899/data`, `/sonarqube-9.3.0.51899/temp`, `/sonarqube-9.3.0.51899/extensions` and `/sonarqube-9.3.0.51899/logs/`, used to store all data, temporary files, plugins and logs.
 
 Use cases
 
@@ -30,46 +30,40 @@ Environment variables
 
 1) This image uses environment variables to allow the configuration of some parameteres at run time:
 
-* Variable name: `DB_USER`
+* Variable name: `SONARQUBE_JDBC_USERNAME`
 * Default value: sonar
 * Accepted values: a valid user created in the database.
 * Description: database user.
+
 ----
 
-* Variable name: `DB_PASS`
+* Variable name: `SONARQUBE_JDBC_PASSWORD`
 * Default value: xaexohquaetiesoo
 * Accepted values: a valid password for the user created in the database.
 * Description: database password.
+
 ----
 
-* Variable name: `DB_NAME`
-* Default value: sonar
-* Accepted values: database name where the container must connect.
+* Variable name: `SONARQUBE_JDBC_URL`
+* Default value: jdbc:postgresql://localhost:5432/sonar"
+* Accepted values: jdbc database url where the container must connect.
 * Description: database name.
-----
 
-* Variable name: `DB_TYPE`
-* Default value: MYSQL
-* Accepted values: database type. MYSQL, POSTGRES, MSSQL
-* Description: database types: mysql, postgres or microsoft sql server
-----
-
-* Variable name: `LANGUAGE_VERSION`
-* Default value: 1.1
-* Description: version of portuguese language plugin.
 ----
 
 
 2) If you'd like to run the container, you must download the plugins to a folder and pass the folder path to the container as below:
 
 ```bash
-docker run -d --name sonarqube \
-           -e DB_USER=sonar \
-           -e DB_PASS=xaexohquaetiesoo \
-           -e DB_NAME=sonar --link postgresql:db \
-           -e DB_TYPE=POSTGRES \
+docker run -u sonarqube -d --name sonarqube \
+           -v ~/projetos/dados/sonarqube/extensions:/sonarqube-9.3.0.51899/extensions \
+           -v ~/projetos/dados/sonarqube/logs:/sonarqube-9.3.0.51899/logs \
+           -v ~/projetos/dados/sonarqube/temp:/sonarqube-9.3.0.51899/temp \
+           -v ~/projetos/dados/sonarqube/data:/sonarqube-9.3.0.51899/data \
+           -e SONARQUBE_JDBC_USERNAME="USER" \
+           -e SONARQUBE_JDBC_PASSWORD="PASSWORD" \
+           -e SONARQUBE_JDBC_URL="jdbc:postgresql://HOST/DATABASE" \
            -p 9408:9000 \
-           -v /media/usbraid/docker/sonar-scanner/plugins:/sonarqube-5.6.6/extensions/plugins \
            paperinik/rpi-sonarqube:latest
 
 ```

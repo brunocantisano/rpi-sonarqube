@@ -7,7 +7,7 @@ if [ ! "$1" = "" ] | [ ! "$2" = "" ]; then
                -e SONARQUBE_JDBC_USERNAME="USER" \
                -e SONARQUBE_JDBC_PASSWORD="PASSWORD" \
                -e SONARQUBE_JDBC_URL="jdbc:postgresql://HOST/DATABASE" \
-               paperinik/rpi-sonarqube:latest
+               paperinik/rpi-sonarqube:9.3.0.51899
 else
     echo -e "\nUSAGE: run.sh your-container-name sonar-version \n\n"
 fi

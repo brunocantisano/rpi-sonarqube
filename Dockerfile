@@ -1,4 +1,4 @@
-FROM balenalib/aio-3288c-openjdk:11-buster-build
+FROM balenalib/aio-3288c-ubuntu-openjdk:xenial
 
 MAINTAINER Bruno Cantisano <bruno.cantisano@gmail.com>
 
@@ -30,9 +30,8 @@ RUN apt-get clean \
     && apt-get install -y \
     build-essential \
     wget \
-    unzip
-
-RUN cd / \
+    unzip \
+    && cd / \
     && wget --no-check-certificate https://download.tanukisoftware.com/wrapper/${WRAPPER_VERSION}/wrapper_prerelease_${WRAPPER_VERSION}.tar.gz \
     && wget http://archive.apache.org/dist/ant/binaries/apache-ant-${ANT_VERSION}-bin.tar.gz \
     && wget --no-check-certificate https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-${SONAR_VERSION}.zip \
@@ -49,7 +48,7 @@ RUN cd / \
     && cp -f /wrapper-linux-armhf-32-${WRAPPER_VERSION}/bin/wrapper /sonarqube-${SONAR_VERSION}/bin/linux-pi/wrapper \
     && cp -f /wrapper-linux-armhf-32-${WRAPPER_VERSION}/lib/libwrapper.so /sonarqube-${SONAR_VERSION}/bin/linux-pi/lib/libwrapper.so \
     && cp -f /wrapper-linux-armhf-32-${WRAPPER_VERSION}/lib/wrapper.jar /sonarqube-${SONAR_VERSION}/lib/wrapper-${WRAPPER_VERSION}.jar \
-    && apt-get purge --auto-remove build-essential wget unzip \
+    && apt-get purge -y --auto-remove build-essential wget unzip \
     && rm -rf /wrapper_prerelease_${WRAPPER_VERSION} /wrapper-linux-armhf-32-${WRAPPER_VERION} /usr/share/ant /var/lib/apt/lists/*
 
 ENV ANT_HOME= 
@@ -62,6 +61,6 @@ RUN chown sonarqube:sonarqube -R $SONARQUBE_HOME
 
 USER sonarqube
 
-VOLUME $SONARQUBE_HOME/data $SONARQUBE_HOME/extensions $SONARQUBE_HOME/logs/
+VOLUME $SONARQUBE_HOME/data $SONARQUBE_HOME/temp $SONARQUBE_HOME/extensions $SONARQUBE_HOME/logs/
 
 ENTRYPOINT ["./bin/entrypoint.sh"]

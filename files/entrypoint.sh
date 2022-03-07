@@ -27,6 +27,7 @@ exec java -jar lib/sonar-application-$SONARQUBE_VERSION.jar \
   -Dsonar.jdbc.password="$SONARQUBE_JDBC_PASSWORD" \
   -Dsonar.jdbc.url="$SONARQUBE_JDBC_URL" \
   -Dsonar.web.javaAdditionalOpts="$SONARQUBE_WEB_JVM_OPTS -Djava.security.egd=file:/dev/./urandom" \
+  -Dsonar.search.javaAdditionalOpts="-Dbootstrap.system_call_filter=false -Dnode.store.allow_mmap=false" \
   "${sq_opts[@]}" \
   "$@"
 
