@@ -2,6 +2,7 @@
 
 [![Docker Stars](https://img.shields.io/docker/stars/paperinik/rpi-sonarqube.svg)](https://hub.docker.com/r/paperinik/rpi-sonarqube/)
 ![rpi-sonarqube](https://img.shields.io/docker/pulls/paperinik/rpi-sonarqube)
+<a href='https://ko-fi.com/brunocantisano' target='_blank'><img height='15' style='border:0px;height:26px;' src='https://az743702.vo.msecnd.net/cdn/kofi3.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' />
 
 ![Raspberry Pi 4](files/raspberry.png)
 This Docker container implements a Sonarqube Server.
